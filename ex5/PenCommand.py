@@ -12,7 +12,7 @@ class SelectPenCommand(ICommand):
 
     _PATTERN = r'P ([d])'
 
-    def __init__(self, pen_type: int) -> None:
+    def __init__(self, pen_type: int = 0) -> None:
         """Initialize pen command."""
         self._pen_type = pen_type
 
