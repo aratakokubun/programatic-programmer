@@ -10,7 +10,8 @@ from ICommandFactory import ICommand, ICommandFactory
 class CommandParser(ICommandParser):
     """Parser for painting application command."""
 
-    def __init(self, factory: ICommandFactory) -> None:
+    def __init__(self, factory: ICommandFactory) -> None:
+        """Initialize factory."""
         self._factory = factory
 
     def parse(self, command_str: str) -> ICommand:

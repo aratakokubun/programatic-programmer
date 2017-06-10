@@ -10,9 +10,14 @@ from IReader import IReader
 class FileReader(IReader):
     """File reader class."""
 
+    def __init__(self, file_path: str) -> None:
+        """Initialize file path."""
+        self._file_path = file_path
+
     def read(self) -> List[str]:
         """Read from file."""
-        pass
+        with open(self._file_path, "r") as file:
+            return file.readlines()
 
 
 class CmdReader(IReader):

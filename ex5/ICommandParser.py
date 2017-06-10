@@ -7,7 +7,7 @@ from abc import ABCMeta, abstractmethod
 from ICommandFactory import ICommand
 
 
-class ICommandParser(ABCMeta):
+class ICommandParser(metaclass=ABCMeta):
     """Abstract parser class for painting application command."""
 
     @abstractmethod

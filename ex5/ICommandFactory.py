@@ -19,6 +19,11 @@ class ICommand(metaclass=ABCMeta):
         """Create command instance for this class."""
         raise NotImplemented()
 
+    @abstractmethod
+    def print(self) -> None:
+        """Print the command contents."""
+        raise NotImplemented()
+
 
 class ICommandFactory(metaclass=ABCMeta):
     """Factory interface to generate commands in the paiting application."""

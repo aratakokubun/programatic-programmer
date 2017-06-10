@@ -21,5 +21,6 @@ class CommandFactory(ICommandFactory):
 
     def createCommand(self, command_str: str) -> ICommand:
         """Create command."""
-        return mit.first_true(self._commands, default=NoneCommand(),
-                              pred=lambda c: c.match(command_str))
+        return mit.first_true(self._commands, default=NoneCommand(command_str),
+                              pred=lambda c: c.match(command_str)
+                              ).create(command_str)
