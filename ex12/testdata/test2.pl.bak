@@ -1,0 +1,3 @@
+#!/usr/bin/perl
+
+print "Pattern2: use strict phrase does not exists\n";
