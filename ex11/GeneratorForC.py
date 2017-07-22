@@ -65,7 +65,7 @@ class GeneratorForCHeader(IGenerator):
     def __generate_head(type_name: str) -> str:
         return '''extern const char* {0}_names[];
 typedef enum {{'''.format(type_name.upper())
-
+    
     @staticmethod
     def __generate_foot(type_name: str) -> str:
         return '}} {0};'.format(type_name.upper())

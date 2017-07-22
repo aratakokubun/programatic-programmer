@@ -1,0 +1,125 @@
+@startuml
+title Scheme Parser and Outputer
+
+'Order Implement classes'
+interface "SchemeOrder" as SOR
+class "MethodOrder" as MOR
+class "FuncOrder" as FOR
+class "EndOrder" as EOR
+class "NullOrder" as NOR
+
+SOR <|.d. MOR
+SOR <|.d. FOR
+SOR <|.d. EOR
+SOR <|.d. NOR
+
+'Responsible for SchemeOrder
+abstract class "SchemeOrderResponsible<T extends SchemeOrder>" as SCORES
+SCORES : - SchemeOrderResponsible next
+SCORES : - boolean hasNext()
+SCORES : + SchemeOrderResponsible setNext(SchemeOrderResponsible)
+SCORES : + T apply(String orderLine)
+SCORES : # {abstract} boolean isResponsible(String orderLine)
+SCORES : # {abstract} T parse()
+class "MethodOrderResponsible<MethodOrder>" as MORES
+class "FuncOrderResonsible<FuncOrder>" as FORES
+class "EndOrderResponsible<EndOrder>" as EORES
+class "NullOrderRespobsible<NullOrder>" as NORES
+
+SCORES <|-d- MORES
+SCORES <|-d- FORES
+SCORES <|-d- EORES
+SCORES <|-d- NORES
+
+'Parser Implement classes
+interface "SchemeParserAcceptor<T>" as SCPA
+SCPA : + void accept(MethodOrder)
+SCPA : + void accept(FuncOrder)
+SCPA : + void accept(EndOrder)
+SCPA : + T generate()
+class "SchemeOrderParser<SchemeOrder>" as SORP
+SORP : - List<String> orderLines
+SORP : - SchemeParserConsumer parserConsumer
+SORP : + SchemeOrderParser(SchemeParserConsumer parserConsumer)
+SORP : + SchemeParserConsumer parse()
+SORP : + addOrder(String orderLine)
+SORP : + addOrders(String orderLine)
+class "SchemeParserFunc<String, SchemeOrder>" as SCPF
+SCPF : - SchemeOrderResponsible responsible
+SCPF : + SchemeOrder apply(String orderLine)
+class "SchemeParserConsumer" as SCPC
+SCPC : - SchemeOrderResponsible responsible
+SCPC : - SchemeParserAcceptor<T> acceptor
+SCPC : + void apply(String orderLine) 
+class "SchemeBuilderAcceptor<Scheme.Builder>" as SCBA
+SCBA : - Scheme.Builder builder
+
+SORP *-- SCPA : <<use>>
+SORP *-d- SCPF : <<use>>
+SCPF *-- SCORES : <<use>>
+SORP *-d- SCPC : <<use>>
+SCPC *-- SCORES : <<use>>
+SCPA <|-- SCBA
+
+'SchemeBuilder Implement classes
+class "Scheme" as SC
+SC : - Scheme()
+SC : + {abstract} StringBuffer getContents()
+class "Scheme.Builder<T extends Scheme.Builder<T>>" as SCB
+SCB : - List<SchcmeOrder> orders
+SCB : + T addOrder(MethodOrder)
+SCB : + T addOrder(EndOrder)
+SCB : + T addOrder(FuncOrder)
+SCB : + {abstract} Scheme build() throws SchemeBuildFailedException
+
+SCB *-l- SC : <<create>>
+SCB *-r- SOR : <<use>>
+SCBA *-d- SCB : <<use>>
+
+'Builder for languages
+class "JavaScheme" as JSC
+JSC : - JScheme()
+class "JavaScheme.Builder" as JSCB
+JSCB : + JavaScheme build() throws SchemeBuildFailedException
+
+class "CScheme" as CSC
+CSC : - CScheme()
+class "CScheme.Builder" as CSCB
+CSCB : + CScheme build() throws SchemeBuildFailedException
+
+class "PyScheme" as PSC
+PSC : - PSheme()
+class "PySchme.Builder" as PSCB
+PSCB : + PSC build() throws SchemeBuildFailedException
+
+SC <|-d- JSC
+JSCB *-l- JSC : <<create>>
+SCB <|-d- JSCB
+SC <|-d-- CSC
+CSCB *-l- CSC : <<create>>
+SCB <|-d-- CSCB
+SC <|-d--- PSC
+PSCB *-l- PSC : <<create>>
+SCB <|-d--- PSCB
+
+'Output
+interface "SchemeOutputer" as SCO
+SCO : void output(Scheme) throws SchemeOutputException
+class "FileSchemeOutputer" as FSCO
+class "ConsoleSchemeOutputer" as CSCO
+
+SCO *-d- SC : <<use>>
+SCO <|.u. FSCO
+SCO <|.u. CSCO
+
+'Exceptions
+class "SchemeException" as SCE
+class "SchemeBuildFailedException" as SCBFE
+class "SchemeOutputException" as SCOE
+class "SchemeParserException" as SCPE
+
+Exception <|-- SCE
+SCE <|-- SCBFE
+SCE <|--SCOE
+SCE <|--SCPE
+@enduml
